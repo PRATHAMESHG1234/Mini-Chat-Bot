@@ -1,6 +1,19 @@
 const natural = require('natural');
 const axios = require('axios');
+const { removeStopwords } = require('stopword');
 const data = require('./data');
+
+function extractImportantWords(userInput) {
+  // Remove stopwords and non-alphabetic characters
+  const importantWords = removeStopwords(userInput.split(' '));
+
+  console.log('importantWords:', importantWords);
+
+  // Join the important words back into a single string
+  const extractedWords = importantWords.join(' ');
+  console.log('extractedWords:', extractedWords);
+  return extractedWords;
+}
 
 async function getSimilarWords(word) {
   const endpoint = `https://api.datamuse.com/words?ml=${word}`;
@@ -64,6 +77,7 @@ function preprocessDataset(dataset) {
 }
 
 function trainModel(preprocessedDataset) {
+  console.log(preprocessedDataset);
   const classifier = new natural.BayesClassifier();
 
   preprocessedDataset.forEach((entry) => {
@@ -84,7 +98,7 @@ function calculateAdjustedProbability(probability, oneWordMatches) {
   return adjustedProbability;
 }
 
-async function findMatchedEntry(input) {
+function findMatchedEntry(input) {
   const tokenizer = new natural.WordTokenizer();
   const stopWords = ['a', 'an', 'the', 'can', 'my', 'i'];
 
@@ -92,7 +106,6 @@ async function findMatchedEntry(input) {
   const inputWords = tokenizer
     .tokenize(input.toLowerCase())
     .filter((word) => !stopWords.includes(word));
-  input = await getSimilarDiscreptionWords(inputWords);
   console.log('inputWords:', input);
   const matchedEntries = [];
 
@@ -108,7 +121,7 @@ async function findMatchedEntry(input) {
         problemCategoryWords.includes(word) ||
         problemDescriptionWords.includes(word)
     );
-
+    console.log('oneWordMatches:', oneWordMatches, 'inputwords:', inputWords);
     const matchPercentage = (oneWordMatches.length / inputWords.length) * 100;
 
     matchedEntries.push({
@@ -134,10 +147,12 @@ async function findMatchedEntry(input) {
 }
 
 async function generateResponse(userInput) {
+  const importantWords = await extractImportantWords(userInput);
+  console.log(importantWords); // Function to extract important words
+
   const classifier = await trainClassifier();
 
-  // console.log('classifier:', classifier);
-  const classifications = classifier.getClassifications(userInput);
+  const classifications = classifier.getClassifications(importantWords);
   const sortedClassifications = classifications.sort(
     (a, b) => b.value - a.value
   );
@@ -147,7 +162,10 @@ async function generateResponse(userInput) {
     category,
     insights: [],
   };
-  const input = userInput + ' ';
+
+  const similarInput = await getSimilarDiscreptionWords(importantWords); // Function to get similar words based on important words
+
+  const input = importantWords + ' ' + similarInput;
   console.log('input:', input);
   const matchedEntry = findMatchedEntry(input);
   // console.log('matchedEntry:', matchedEntry);
@@ -209,15 +227,16 @@ async function generateResponse(userInput) {
 
   return response;
 }
+let preprocessedData;
+const updateAndPreprocessdata = async (data) => {
+  const updatedData = await appendSimilarWordsToCategoriesAndDescreption(data);
 
+  preprocessedData = await preprocessDataset(updatedData);
+  return;
+};
+updateAndPreprocessdata(data);
 const trainClassifier = async () => {
   try {
-    const updatedData = await appendSimilarWordsToCategoriesAndDescreption(
-      data
-    );
-
-    const preprocessedData = preprocessDataset(updatedData);
-
     return trainModel(preprocessedData);
     // Train the classifier
   } catch (error) {
