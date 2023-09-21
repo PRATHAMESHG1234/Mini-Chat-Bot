@@ -50,7 +50,10 @@ function Layout({ children, user }) {
       ) : (
         <>
           <Navbar />
-          <Container style={{ paddingTop: '1rem' }} text>
+          <Container
+            style={{ paddingTop: '1rem' }}
+            text
+          >
             {children}
           </Container>
         </>
