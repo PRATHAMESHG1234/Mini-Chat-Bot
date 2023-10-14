@@ -1,4 +1,4 @@
-import React, { createRef, useEffect } from 'react';
+import React, { createRef, useEffect } from "react";
 import {
   Container,
   Grid,
@@ -6,13 +6,13 @@ import {
   Segment,
   Sticky,
   Visibility,
-} from 'semantic-ui-react';
-import HeadTags from './HeadTags';
-import nprogress from 'nprogress';
-import Router from 'next/router';
-import Chat from '../pages/Chat';
-import Navbar from './Navbar';
-import Footer from './footer';
+} from "semantic-ui-react";
+import HeadTags from "./HeadTags";
+import nprogress from "nprogress";
+import Router from "next/router";
+import Chat from "../pages/Chat";
+import Navbar from "./Navbar";
+import Footer from "./footer";
 
 function Layout({ children, user }) {
   const contextRef = createRef();
@@ -30,30 +30,27 @@ function Layout({ children, user }) {
       nprogress.done();
     };
 
-    Router.events.on('routeChangeStart', handleRouteChangeStart);
-    Router.events.on('routeChangeComplete', handleRouteChangeComplete);
-    Router.events.on('routeChangeError', handleRouteChangeError);
+    Router.events.on("routeChangeStart", handleRouteChangeStart);
+    Router.events.on("routeChangeComplete", handleRouteChangeComplete);
+    Router.events.on("routeChangeError", handleRouteChangeError);
 
     return () => {
-      Router.events.off('routeChangeStart', handleRouteChangeStart);
-      Router.events.off('routeChangeComplete', handleRouteChangeComplete);
-      Router.events.off('routeChangeError', handleRouteChangeError);
+      Router.events.off("routeChangeStart", handleRouteChangeStart);
+      Router.events.off("routeChangeComplete", handleRouteChangeComplete);
+      Router.events.off("routeChangeError", handleRouteChangeError);
     };
   }, []);
 
   return (
     <>
       <HeadTags />
-      <Navbar />
+
       {user ? (
         <Chat user={user} />
       ) : (
         <>
           <Navbar />
-          <Container
-            style={{ paddingTop: '1rem' }}
-            text
-          >
+          <Container style={{ paddingTop: "1rem" }} text>
             {children}
           </Container>
         </>

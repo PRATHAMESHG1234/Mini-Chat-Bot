@@ -13,7 +13,7 @@ const data = [
       },
       {
         sloka: "Chapter 2, Verse 3",
-        speaker: `Lord Krushna Say's`,
+        speaker: `Lord abc Say's`,
         sanskrit:
           "क्लैब्यं मा स्म गमः पार्थ नैतत्त्वय्युपपद्यते। क्षुद्रं हृदयदौर्बल्यं त्यक्त्वोत्तिष्ठ परंतप॥",
         translation:

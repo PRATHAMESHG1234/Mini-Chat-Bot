@@ -183,6 +183,11 @@ async function generateResponse(userInput) {
     response.category = matchedEntry.problemCategory;
     // Find the most relevant insight based on similarity
     const insights = matchedEntry.philosophicalInsights;
+
+    // console.log(
+    //   "matchedEntry.philosophicalInsights.speaker",
+    //   matchedEntry.philosophicalInsights
+    // );
     if (insights.length >= 2) {
       const sortedInsights = insights.sort((a, b) => {
         const similarityA = natural.JaroWinklerDistance(
@@ -211,10 +216,11 @@ async function generateResponse(userInput) {
         const adjustedProbability =
           calculateAdjustedProbability(probability, oneWordMatches) +
           Math.random();
-
+        const userMessage = `You asked me about ${response.category}. Here is what ${insight.speaker} say's`;
         if (matchedEntry.matchPercentage > 0) {
           response.insights.push({
             sloka: insight.sloka,
+            userMessage,
             speaker: insight.speaker,
             sanskrit: insight.sanskrit,
             translation: insight.translation,

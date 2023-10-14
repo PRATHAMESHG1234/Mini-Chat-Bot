@@ -1,22 +1,23 @@
-import React from 'react';
-import 'semantic-ui-css/semantic.min.css';
-import Layout from '@/Layout/layout';
-import { destroyCookie, parseCookies } from 'nookies';
-import '../pages/Chat.css';
+import React from "react";
+import "semantic-ui-css/semantic.min.css";
+import Layout from "@/Layout/layout";
+import { destroyCookie, parseCookies } from "nookies";
+import "../public/Chat.css";
+import "../public/ResponseFormats.css";
 // import '@fortawesome/fontawesome-svg-core/styles.css';
 
-import axios from 'axios';
-import baseUrl from '@/utils/baseUrl';
-import { redirectUser } from '@/utils/authUser';
+import axios from "axios";
+import baseUrl from "@/utils/baseUrl";
+import { redirectUser } from "@/utils/authUser";
 
 MyApp.getInitialProps = async ({ Component, ctx }) => {
   const { token } = parseCookies(ctx);
   let pageProps = {};
 
-  const protectedRouts = ctx.pathname === '/';
+  const protectedRouts = ctx.pathname === "/";
 
   if (!token) {
-    protectedRouts && redirectUser(ctx, '/login');
+    protectedRouts && redirectUser(ctx, "/login");
   } else {
     if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx);
@@ -28,13 +29,13 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
 
       const { user } = res.data;
 
-      if (user) !protectedRouts && redirectUser(ctx, '/');
+      if (user) !protectedRouts && redirectUser(ctx, "/");
 
       pageProps.user = user;
       pageProps.token = token;
     } catch (error) {
-      destroyCookie(ctx, 'token');
-      redirectUser(ctx, '/login');
+      destroyCookie(ctx, "token");
+      redirectUser(ctx, "/login");
     }
   }
 
