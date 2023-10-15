@@ -15,6 +15,7 @@ function runPythonScriptAndGetRelatedData(inputProblem, filename) {
 
     // Listen for any errors that occur while running the Python script
     pythonProcess.stderr.on("data", (data) => {
+      // console.log("****************");
       reject(`Error: ${data.toString()}`);
     });
 
@@ -37,8 +38,8 @@ function runPythonScriptAndGetRelatedData(inputProblem, filename) {
   });
 }
 
-// const inputProblem = "I am feeling anxious about my upcoming job interview.";
-// const filename = "newai.py"; // Replace with the actual path
+// const inputProblem1 = "I am feeling anxious about my upcoming job interview.";
+// const filename = "main.py"; // Replace with the actual path
 
 const run = async (inputProblem, filename) => {
   const response = await runPythonScriptAndGetRelatedData(
@@ -49,5 +50,5 @@ const run = async (inputProblem, filename) => {
   return response;
 };
 
-// run(inputProblem, filename);
+// run(inputProblem1, filename);
 module.exports = { run };

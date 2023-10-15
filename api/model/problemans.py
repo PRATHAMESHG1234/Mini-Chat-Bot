@@ -1,10 +1,9 @@
-# Assuming 'data' contains your DataFrame data
-import matplotlib.pyplot as plt
-import pandas as pd
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
 from sklearn.model_selection import train_test_split
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import accuracy_score, classification_report
+import pandas as pd
+
+
 from trainingData.chapter123 import chapter123
 from trainingData.chapter4 import chapter4
 from trainingData.chapter5 import chapter5
@@ -12,53 +11,78 @@ from trainingData.chapter6 import chapter6
 from trainingData.chapter7 import chapter7
 from trainingData.chapter8 import chapter8
 from trainingData.chapter9 import chapter9
-
-# Define the data and answers as a list of dictionaries
-data = chapter123 + chapter4+chapter5+chapter6+chapter7+chapter8+chapter9
-# print(data)
-# Convert the list of dictionaries to a DataFrame
-df = pd.DataFrame(data)
-
-# Define the features (X) as the "problem"
-X = df['problem']
-# print(df)
-# Vectorize the text data (convert text to numerical features)
-tfidf_vectorizer = TfidfVectorizer(max_features=5000)
-X_tfidf = tfidf_vectorizer.fit_transform(X)
-
-# Train a text classification model for each attribute
-classifiers = {}
-attributes = ['chapter', 'verse', 'shloka']
-
-for attribute in attributes:
-    y = df[attribute]
-    classifier = MultinomialNB()
-    classifier.fit(X_tfidf, y)
-    classifiers[attribute] = classifier
-
-# Define a function to predict attributes for a given problem
+from trainingData.chapter10 import chapter10
+from trainingData.chapter11 import chapter11
+from trainingData.chapter12 import chapter12
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.impute import SimpleImputer
 
 
-def predict_attributes(problem):
-    # Vectorize the input problem using the same TF-IDF vectorizer
-    problem_tfidf = tfidf_vectorizer.transform([problem])
-    # print(problem_tfidf)
-    # Make predictions using the trained models
-    predictions = {}
-    for attribute in attributes:
-        predicted_attribute = classifiers[attribute].predict(problem_tfidf)
-        predictions[attribute] = predicted_attribute[0]
-        # print("predict_attributes+ ", predicted_attribute)
+def combine_data():
+    # Combine chapter data
+    data = chapter123 + chapter4 + chapter5 + chapter6 + chapter7 + \
+        chapter8 + chapter9 + chapter10 + chapter11 + chapter12
+    return data
 
+
+def preprocess_data(data):
+    # Convert the data to a DataFrame
+    df = pd.DataFrame(
+        data, columns=['problem', 'answer', 'chapter', 'verse', 'shloka'])
+
+    # Preprocess text data
+    df['problem'] = df['problem'].str.lower()
+
+    # Specify the dummy value
+    dummy_value = 'your_dummy_value'
+
+    df.dropna(inplace=True)
+
+    # Print the DataFrame after filling NaN values
+    # print(df)
+
+    return df
+
+
+def train_models(df):
+    # Define features and target columns
+    X = df['problem']
+    y = df[['answer', 'chapter', 'verse', 'shloka']]  # Include all fields in y
+    # Convert text data to TF-IDF features
+    vectorizer = TfidfVectorizer(max_features=5000)
+    X_tfidf = vectorizer.fit_transform(X)
+
+    # Define and train the models (Logistic Regression) for all fields in y simultaneously
+    models = {}
+    for field in y.columns:
+
+        model = LogisticRegression()
+        model.fit(X_tfidf, y[field])
+        models[field] = model
+    return vectorizer, models
+
+
+def predict_attributes(vectorizer, models, input_problem):
+    input_problem = input_problem.lower()
+    input_tfidf = vectorizer.transform([input_problem])
+    predicted_values_dict = {}
+    for field, model in models.items():
+        predicted_values_dict[field] = model.predict(input_tfidf)[0]
+    return predicted_values_dict
+
+
+def index(input_problem):
+    data = combine_data()
+    df = preprocess_data(data)
+    vectorizer, models = train_models(df)
+    predictions = predict_attributes(vectorizer, models, input_problem)
     return predictions
 
 
-# Create a DataFrame
-# df = pd.DataFrame(data)
-
-# Plot the DataFrame
-# plt.figure(figsize=(10, 6))
-# df.plot(kind='scatter', x='chapter', y='verse', title='Chapter vs. Verse')
-# plt.xlabel('Chapter')
-# plt.ylabel('Verse')
-# plt.show()
+# Example Usage
+# input_problem = "Krishna's Cosmic Vision"
+# predictions = index(input_problem)
+# print(predictions)

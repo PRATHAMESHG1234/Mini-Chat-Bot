@@ -191,6 +191,7 @@ import {
   Modal,
   Divider,
 } from "semantic-ui-react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
@@ -214,8 +215,6 @@ function Chat({ user, token }) {
   });
 
   const toggleTranslation = (sanskritAnuvad, HindiAnuvad) => {
-    console.log("******************");
-
     setPopupContent({
       sanskrit: sanskritAnuvad,
       HindiAnuvad: HindiAnuvad,

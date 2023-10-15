@@ -2,7 +2,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.naive_bayes import MultinomialNB
 import traceback
-from problemans import predict_attributes
+from problemans import index
 
 
 def load_data():
@@ -13,7 +13,7 @@ def load_data():
 
 def find_related_data(input_problem, df):
     try:
-        predictions = predict_attributes(input_problem)
+        predictions = index(input_problem)
         search_text = "Verse " + \
             str(predictions['chapter']) + "." + str(predictions['verse'])
 
@@ -43,7 +43,8 @@ def find_related_data(input_problem, df):
                 "PredictedSanskritAnuvad": predictions['shloka'],
                 "HindiAnuvad": Hindi_Anuvad,
                 "EnglishTranslation": Enlgish_Translation,
-                "Title": Title
+                "Title": Title,
+                "Situation": predictions["answer"]
             }
 
             return related_data

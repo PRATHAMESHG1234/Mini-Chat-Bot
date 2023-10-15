@@ -28,14 +28,24 @@ const CustomText = ({
       {selectedResponse.text}
 
       {showEnglishTranslation && (
-        <Button
-          className="toggle-button"
-          onClick={() =>
-            toggleTranslation(response.SanskritAnuvad, response.HindiAnuvad)
-          }
-        >
-          Toggle Hindi Translation
-        </Button>
+        <>
+          <div className="toggle-button">
+            <Button
+              onClick={() =>
+                toggleTranslation(response.SanskritAnuvad, response.HindiAnuvad)
+              }
+            >
+              Toggle Hindi Translation
+            </Button>
+            <Button
+              onClick={() =>
+                toggleTranslation(response.SanskritAnuvad, response.Situation)
+              }
+            >
+              See situation
+            </Button>
+          </div>
+        </>
       )}
     </>
   );
