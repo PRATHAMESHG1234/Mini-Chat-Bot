@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanuman&family=Kaushan+Script&family=Merriweather:ital@1&family=Montserrat:wght@200&family=Poppins:wght@200&family=Sacramento&display=swap');
+
 body {
-  background: #0A2463;
+  background: #5f77b2;
 }
 
 
@@ -20,10 +22,11 @@ body {
   padding: 1rem;
   margin: 0 auto;
   width: 60%;
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgb(4, 251, 48, 0.17);
   position: relative;
-  box-shadow: -5px 0 5px -5px rgba(0, 0, 0, 0.4), 5px 0 5px -5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 35px 2px rgba(0, 0, 0, 0.5);
 }
+
 
 
 .loading-dots {
@@ -145,9 +148,12 @@ body {
 }
 
 .chat-message.user {
+  font-family: 'Hanuman', serif;
+  font-size: 17px;
   text-align: start;
+  color: #cccccc;
   align-self: flex-start;
-  background-color: #d4e7fa;
+  background-color: #637e95;
   margin-left: 10px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
@@ -192,7 +198,7 @@ body {
   bottom: 48px;
   padding: 1rem;
   background-color: rgba(0, 0, 0, 0.4);
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 35px 2px rgba(0, 0, 0, 0.5);
   width: 60%;
   display: inline-block;
 left: 20%;

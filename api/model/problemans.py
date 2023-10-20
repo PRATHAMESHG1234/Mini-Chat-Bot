@@ -77,12 +77,45 @@ def predict_attributes(vectorizer, models, input_problem):
 def index(input_problem):
     data = combine_data()
     df = preprocess_data(data)
-    vectorizer, models = train_models(df)
-    predictions = predict_attributes(vectorizer, models, input_problem)
-    return predictions
+    result = calculate_word_presence_percentage(df, input_problem)
+    if result:
+        vectorizer, models = train_models(df)
+        predictions = predict_attributes(vectorizer, models, input_problem)
+        return predictions
+
+
+def calculate_word_presence_percentage(dataframe, sentence):
+    """
+    Calculate the percentage of words from the given sentence that are present in the 'problem' column of the DataFrame.
+
+    Args:
+    dataframe (pandas.DataFrame): DataFrame containing 'problem' column.
+    sentence (str): The sentence to calculate word presence percentage from.
+
+    Returns:
+    float: Percentage of words from the sentence present in 'problem' fields.
+    """
+    # Split the input sentence into words
+    words_in_sentence = set(sentence.lower().split())
+
+    # Count how many words from the sentence are present in any 'problem' field
+    total_words_in_sentence = len(words_in_sentence)
+    matching_words_count = 0
+    for problem in dataframe['problem']:
+        problem_words = set(problem.lower().split())
+        matching_words_count += len(
+            words_in_sentence.intersection(problem_words))
+
+    # Calculate the percentage of words present in 'problem' fields
+    if total_words_in_sentence > 0:
+        percentage = (matching_words_count / total_words_in_sentence) * 100
+    else:
+        percentage = 0
+
+    return percentage
 
 
 # Example Usage
-# input_problem = "Krishna's Cosmic Vision"
+# input_problem = "Sanjaya describes how Duryodhana, upon observing the Pandava army arranged for battle, approached his teacher Drona and spoke the following words."
 # predictions = index(input_problem)
 # print(predictions)
