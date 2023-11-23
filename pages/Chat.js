@@ -190,6 +190,7 @@ import {
   Popup,
   Modal,
   Divider,
+  Form,
 } from "semantic-ui-react";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -370,25 +371,27 @@ function Chat({ user, token }) {
         </div>
       </div>
       <div className="chat-input">
-        <Input
-          fluid
-          placeholder="Type a message..."
-          value={inputValue}
-          onChange={handleInputChange}
-          action={
-            <Button onClick={handleSendMessage} disabled={isBotTypingButton}>
-              {isBotTypingButton ? (
-                <div className="loading-dots">
-                  <span className="dot"></span>
-                  <span className="dot"></span>
-                  <span className="dot"></span>
-                </div>
-              ) : (
-                <MdSend style={{ fontSize: "24px", color: "green" }} />
-              )}
-            </Button>
-          }
-        />
+        <Form onSubmit={handleSendMessage}>
+          <Input
+            fluid
+            placeholder="Type a message..."
+            value={inputValue}
+            onChange={handleInputChange}
+            action={
+              <Button type="submit" disabled={isBotTypingButton}>
+                {isBotTypingButton ? (
+                  <div className="loading-dots">
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                    <span className="dot"></span>
+                  </div>
+                ) : (
+                  <MdSend style={{ fontSize: "24px", color: "green" }} />
+                )}
+              </Button>
+            }
+          />
+        </Form>
       </div>
     </>
   );

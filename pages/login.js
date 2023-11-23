@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Divider, Form, Message, Segment } from 'semantic-ui-react';
+import React, { useEffect, useState } from "react";
+import { Button, Divider, Form, Message, Segment } from "semantic-ui-react";
 import {
   HeaderMessage,
   FooterMessage,
-} from '../components/Common/WelcomeMessage';
-import { loginUser } from '@/utils/authUser';
-import Cookies from 'js-cookie';
+} from "../components/Common/WelcomeMessage";
+import { loginUser } from "@/utils/authUser";
+import Cookies from "js-cookie";
 const login = () => {
   const [user, setUser] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const { email, password } = user;
@@ -40,9 +40,9 @@ const login = () => {
   };
 
   useEffect(() => {
-    document.title = 'Welcome Back';
+    document.title = "Welcome Back";
 
-    const userEmail = Cookies.get('userEmail');
+    const userEmail = Cookies.get("userEmail");
     if (userEmail) {
       setUser((prev) => ({ ...prev, email: userEmail }));
     }
@@ -57,46 +57,46 @@ const login = () => {
       >
         <Message
           error
-          header='Oops!'
+          header="Oops!"
           content={errorMsg}
           onDismiss={() => setErrorMsg(null)}
         />
         <Segment>
           <Form.Input
-            label='Email'
-            placeholder='Email'
-            name='email'
+            label="Email"
+            placeholder="Email"
+            name="email"
             value={email}
             onChange={handleChange}
             fluid
-            icon='envelope'
-            iconPosition='left'
-            type='email'
+            icon="envelope"
+            iconPosition="left"
+            type="email"
             required
           />
           <Form.Input
-            label='Password'
-            placeholder='Password'
-            name='password'
+            label="Password"
+            placeholder="Password"
+            name="password"
             value={password}
             onChange={handleChange}
             fluid
             icon={{
-              name: 'eye',
+              name: "eye",
               circular: true,
               link: true,
               onClick: () => setShowPassword(!showPassword),
             }}
-            iconPosition='left'
-            type={showPassword ? 'text' : 'password'}
+            iconPosition="left"
+            type={showPassword ? "text" : "password"}
             required
           />
           <Divider hidden />
           <Button
-            content='login'
-            icon='signup'
-            type='submit'
-            color='orange'
+            content="login"
+            icon="signup"
+            type="submit"
+            color="orange"
             disabled={submitDisabled}
           />
         </Segment>
